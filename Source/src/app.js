@@ -5,7 +5,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet'); // Protege la API de ataques de XSS y clickjacking
 const rateLimit = require('express-rate-limit'); // Protege la API de ataques de fuerza bruta
-//const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger_output.json');
+const cors = require('cors');
 
 //Rutas API
 const V1Router = require('./V1/routes/mainRoutes');
@@ -26,9 +28,11 @@ app.use(helmet());
 
 app.use(limiter);
 
-//app.use(cors());
+
+app.use(cors({ origin: '*' }));
 
 app.use('/v1', V1Router);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

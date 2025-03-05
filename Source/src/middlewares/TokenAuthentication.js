@@ -21,4 +21,15 @@ const verifyJWT = (req, res, next) => {
   });
 };
 
-module.exports = verifyJWT;
+//Verifica que el token JWT sea válido y no haya expirado
+//E: Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... Desceralizar el token user.role === 'admin'
+//S: 401 Error: Token JWT faltante || Token inválido o expirado. 
+//Continua con la ejecución si el token es válido.
+const verifyAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Acceso denegado: Se requiere rol de administrador' });
+  }
+  next();
+};
+
+module.exports = { verifyJWT, verifyAdmin };

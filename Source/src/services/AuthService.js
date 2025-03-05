@@ -1,26 +1,21 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
+const { loginUser } = require('../database/users');
 
 const generateToken = (user) => {
   return jwt.sign(
-    { id: user.id, username: user.username, role: user.role },
+    { id: user.id, role: (user.role).toLowerCase() },
     JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: '10h' }
   );
 };
 
-const verifyCredentials = (username, password) => {
+const verifyCredentials = async (username, password) => {
   // Lógica para verificar las credenciales del usuario
-  const mockUser = {
-    id: 1,
-    username: 'Rivel',
-    password: 'lr',
-    role: 'admin'
-  }; //tmp para pruebas
 
-  return username === mockUser.username && password === mockUser.password 
-    ? mockUser 
-    : null;
+  var user  = await loginUser(username,password);
+
+  return user;
 };
 
 module.exports = { generateToken, verifyCredentials };
