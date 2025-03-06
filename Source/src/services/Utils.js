@@ -6,7 +6,10 @@ const { BadRequestError } = require("./TypeHttpsResponses");
 const validateRequest = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return BadRequestError("Validation failed", { cause: errors.array() });
+    return res.status(400).json({
+      message: "Validation failed",
+      errors: errors.array() 
+    });
   }
   next(); 
 };
