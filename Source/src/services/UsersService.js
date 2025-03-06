@@ -10,7 +10,7 @@ const getUsers = async () => {
 
 
 //E: Objeto con los datos del usuario
-//E: {user_name: "nombre", first_name: "nombre", last_name: "apellido", password: "contraseña", role: "rol",
+//E: {username: "nombre", first_name: "nombre", last_name: "apellido", password: "contraseña", role: "rol",
 //  mail: "correo", phone: "telefono", gender: "genero", city: "ciudad", address: "direccion"}
 //S: Usuario creado || Error
 const createUser = async (user) => {
@@ -28,7 +28,7 @@ const createUser = async (user) => {
 
 
 //E: Objeto con los datos del usuario
-//E: {user_name: "nombre", first_name: "nombre", last_name: "apellido", password: "contraseña", role: "rol",
+//E: {username: "nombre", first_name: "nombre", last_name: "apellido", password: "contraseña", role: "rol",
 //  mail: "correo", phone: "telefono", gender: "genero", city: "ciudad", address: "direccion"}
 //S: Usuario creado || Error
 const RegisterUser = async (user) => {
@@ -53,9 +53,8 @@ const updateUsers = async (data) => {
   try {
 
 
-    const roleId = await updateUser(data.id, data.user);
 
-    return await insertUserWithRole(userData, roleId);
+    return await updateUser(data.id, data.user);
   } catch (error) {
       throw error;
   }

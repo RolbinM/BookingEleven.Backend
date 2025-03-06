@@ -53,7 +53,6 @@ async function getAllUsers() {
           .get();
   
         if (emailSnapshot.empty) {
-          console.log("Usuario no encontrado");
           return { success: false, message: "Usuario no encontrado" };
         }
   
@@ -77,7 +76,6 @@ async function getAllUsers() {
             },
           };
         } else {
-          console.log("Contraseña incorrecta");
           return { success: false, message: "Contraseña incorrecta" };
         }
       }
@@ -102,7 +100,6 @@ async function getAllUsers() {
           },
         };
       } else {
-        console.log("Contraseña incorrecta");
         return { success: false, message: "Contraseña incorrecta" };
       }
     } catch (error) {
@@ -116,9 +113,9 @@ async function getAllUsers() {
 //S: id del usuario || Error
 async function insertUserWithRole(userData, uroleId) {
   try {
-      const { username, user_mail } = userData;
+      const { username, mail } = userData;
 
-
+      
       const usernameSnapshot = await db.collection("user")
           .where("username", "==", username)
           .get();
@@ -129,7 +126,7 @@ async function insertUserWithRole(userData, uroleId) {
 
 
       const userMailSnapshot = await db.collection("user")
-          .where("user_mail", "==", user_mail)
+          .where("mail", "==", mail)
           .get();
 
       if (!userMailSnapshot.empty) {
@@ -137,11 +134,12 @@ async function insertUserWithRole(userData, uroleId) {
       }
 
       const token = generateNumericOTP();
+      const roleRef = db.collection("user_role").doc(uroleId);
 
       // Agregar campos adicionales
       const fullUserData = {
           ...userData,
-          urole_id: `/user_role/${uroleId}`,
+          urole_id: roleRef,
           state: "Pending",
           sfield_favorites: [],
           create_date: new Date(),
@@ -197,13 +195,13 @@ async function Register(userData, uroleId) {
               throw new ConflictError("El usuario ya está registrado con este correo o username");
           }
       }
-
+      const roleRef = db.collection("user_role").doc(uroleId);
       const token = generateNumericOTP();
 
       // Agregar campos adicionales
       const fullUserData = {
           ...userData,
-          urole_id: `/user_role/${uroleId}`,
+          urole_id: roleRef,
           state: "Pending",
           sfield_favorites: [],
           create_date: now,
@@ -299,7 +297,7 @@ async function updateUser(userId, updateData) {
       const updates = {};
 
 
-      if (updateData.user_name) updates.user_name = updateData.user_name;
+      if (updateData.username) updates.username = updateData.username;
       if (updateData.first_name) updates.first_name = updateData.first_name;
       if (updateData.last_name) updates.last_name = updateData.last_name;
       if (updateData.password) updates.password = updateData.password;

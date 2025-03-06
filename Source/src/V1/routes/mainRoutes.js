@@ -61,7 +61,7 @@ router
         "/register",
         verifyHMAC,
         [
-            check('user_name')
+            check('username')
                 .isString()
                 .notEmpty()
                 .withMessage('El nombre de usuario es obligatorio'),
@@ -165,7 +165,7 @@ router
         verifyHMAC,
         verifyAdmin,
         [
-            check('user_name')
+            check('username')
                 .isString()
                 .notEmpty()
                 .withMessage('El nombre de usuario es obligatorio'),
